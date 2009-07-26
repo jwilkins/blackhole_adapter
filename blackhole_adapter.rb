@@ -18,12 +18,17 @@ end
 
 module ActiveRecord
   class Base
-    class << self
-      def blackhole_connection(config)
-        puts "ActiveRecord::Base.#{method_name} called"
-        db = BlackHoleAdapter::Database.new()
-        ConnectionAdapters::BlackHoleAdapter.new(db, logger, config)
-      end
+    def method_missing(name, *args, &block)
+      puts "ActiveRecord::ConnectionAdapters::BlackHoleAdapter.#{method_name} called"
+      puts "  name: #{name}"
+      puts "  args: #{args.join(', ')}"
+      puts "  block: #{block}"
+    end
+
+    def self.blackhole_connection(config)
+      puts "ActiveRecord::Base.#{method_name} called"
+      db = BlackHoleAdapter::Database.new()
+      ConnectionAdapters::BlackHoleAdapter.new(db, logger, config)
     end
   end
 
@@ -100,17 +105,19 @@ module ActiveRecord
       # Quoting
       def quote_string(s)
         puts "ActiveRecord::ConnectionAdapters::BlackHoleAdapter.#{method_name} called"
+        puts "  s: #{s}"
         s
       end
 
       def quote_column_name(name)
         puts "ActiveRecord::ConnectionAdapters::BlackHoleAdapter.#{method_name} called"
+        puts "  name: #{name}"
         name
       end
 
       # Database statements
       def execute(sql, name = nil)
-        puts "ActiveRecord::ConnectionAdapters::BlackHoleAdapter.#{method_name} called"
+        puts "ActiveRecords::ConnectionAdapters::BlackHoleAdapter.#{method_name} called"
       end
 
       def update_sql(sql, name = nil)
@@ -121,7 +128,7 @@ module ActiveRecord
         puts "ActiveRecord::ConnectionAdapters::BlackHoleAdapter.#{method_name} called"
       end
 
-      def insert_sql(sql, name = nil)
+      def insert_sql(sql, name = nil, pk = nil, id_value = nil, sequence_name = nil)
         puts "ActiveRecord::ConnectionAdapters::BlackHoleAdapter.#{method_name} called"
       end
 
@@ -147,6 +154,8 @@ module ActiveRecord
 
       def select(sql, name = nil)
         puts "ActiveRecord::ConnectionAdapters::BlackHoleAdapter.#{method_name} called"
+        puts "  sql: #{sql}"
+        puts "  name: #{name}" if name
         []
       end
 

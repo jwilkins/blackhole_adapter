@@ -12,5 +12,11 @@ class User < ActiveRecord::Base
 end
 
 puts User.count
-# SQL (0.000277)   SELECT count(*) AS count_all FROM users
+# => 0
+
+user = User.new
+user.first_name = "Rumplestiltskin"
+user.save
+
+puts User.count
 # => 0
