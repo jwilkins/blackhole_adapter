@@ -1,0 +1,14 @@
+I was curious what the minimum implementation for ActiveRecord was.
+
+So I poked around in active_record/connection_adapters/abstract_adapter and
+in the SQLite adapter and came up with this.
+
+If you set your adapter to 'blackhole' you can do the following:
+
+
+  class User < ActiveRecord::Base
+  end
+
+  puts User.count
+  # SQL (0.000277)   SELECT count(*) AS count_all FROM users
+  # => 0
