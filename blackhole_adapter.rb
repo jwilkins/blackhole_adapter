@@ -19,10 +19,7 @@ end
 module ActiveRecord
   class Base
     def method_missing(name, *args, &block)
-      puts "ActiveRecord::ConnectionAdapters::BlackHoleAdapter.#{method_name} called"
-      puts "  name: #{name}"
-      puts "  args: #{args.join(', ')}"
-      puts "  block: #{block}"
+      puts "ActiveRecord::Base::.#{name}(#{args.join(', ')}) called"
     end
 
     def self.blackhole_connection(config)
@@ -39,18 +36,18 @@ module ActiveRecord
     class BlackHoleAdapter < AbstractAdapter
       def initialize(connection, logger, config)
         puts "ActiveRecord::ConnectionAdapters::BlackHoleAdapter.#{method_name} called"
-        puts "  connection: #{connection}; logger: #{logger}, config: #{config}"
+        puts "  connection: #{connection}; logger: #{logger}"
         super(connection, logger)
         @config = config
+      end
+
+      def method_missing(name, *args, &block)
+        puts "ActiveRecord::ConnectionAdapters::BlackHoleAdapter.#{name}(#{args.join(', ')}) called"
       end
 
       def adapter_name
         puts "ActiveRecord::ConnectionAdapters::BlackHoleAdapter.#{method_name} called"
         'BlackHoleAdapter'
-      end
-
-      def disconnect!
-        puts "ActiveRecord::ConnectionAdapters::BlackHoleAdapter.#{method_name} called"
       end
 
       # Features
@@ -104,58 +101,18 @@ module ActiveRecord
 
       # Quoting
       def quote_string(s)
-        puts "ActiveRecord::ConnectionAdapters::BlackHoleAdapter.#{method_name} called"
-        puts "  s: #{s}"
+        puts "ActiveRecord::ConnectionAdapters::BlackHoleAdapter.#{method_name}(#{s}) called"
         s
       end
 
       def quote_column_name(name)
-        puts "ActiveRecord::ConnectionAdapters::BlackHoleAdapter.#{method_name} called"
-        puts "  name: #{name}"
+        puts "ActiveRecord::ConnectionAdapters::BlackHoleAdapter.#{method_name}(#{name}) called"
         name
       end
 
       # Database statements
-      def execute(sql, name = nil)
-        puts "ActiveRecords::ConnectionAdapters::BlackHoleAdapter.#{method_name} called"
-      end
-
-      def update_sql(sql, name = nil)
-        puts "ActiveRecord::ConnectionAdapters::BlackHoleAdapter.#{method_name} called"
-      end
-
-      def delete_sql(sql, name = nil)
-        puts "ActiveRecord::ConnectionAdapters::BlackHoleAdapter.#{method_name} called"
-      end
-
-      def insert_sql(sql, name = nil, pk = nil, id_value = nil, sequence_name = nil)
-        puts "ActiveRecord::ConnectionAdapters::BlackHoleAdapter.#{method_name} called"
-      end
-
-      def select_rows(sql, name = nil)
-        puts "ActiveRecord::ConnectionAdapters::BlackHoleAdapter.#{method_name} called"
-      end
-
-      def begin_db_transaction
-        puts "ActiveRecord::ConnectionAdapters::BlackHoleAdapter.#{method_name} called"
-      end
-
-      def commit_db_transaction
-        puts "ActiveRecord::ConnectionAdapters::BlackHoleAdapter.#{method_name} called"
-      end
-
-      def rollback_db_transaction
-        puts "ActiveRecord::ConnectionAdapters::BlackHoleAdapter.#{method_name} called"
-      end
-
-      def add_lock!(sql, options)
-        puts "ActiveRecord::ConnectionAdapters::BlackHoleAdapter.#{method_name} called"
-      end
-
       def select(sql, name = nil)
-        puts "ActiveRecord::ConnectionAdapters::BlackHoleAdapter.#{method_name} called"
-        puts "  sql: #{sql}"
-        puts "  name: #{name}" if name
+        puts "ActiveRecord::ConnectionAdapters::BlackHoleAdapter.#{method_name}(#{sql})"
         []
       end
 
@@ -173,51 +130,6 @@ module ActiveRecord
       def indexes(table_name, name = nil)
         puts "ActiveRecord::ConnectionAdapters::BlackHoleAdapter.#{method_name} called"
         []
-      end
-
-      def primary_key(table_name)
-        puts "ActiveRecord::ConnectionAdapters::BlackHoleAdapter.#{method_name} called"
-      end
-
-      def remove_index(table_name, options={})
-        puts "ActiveRecord::ConnectionAdapters::BlackHoleAdapter.#{method_name} called"
-      end
-
-      def rename_table(name, new_name)
-        puts "ActiveRecord::ConnectionAdapters::BlackHoleAdapter.#{method_name} called"
-      end
-
-      def valid_alter_table_options(type, options)
-        puts "ActiveRecord::ConnectionAdapters::BlackHoleAdapter.#{method_name} called"
-      end
-
-      def add_column(table_name, column_name, type, options={})
-        puts "ActiveRecord::ConnectionAdapters::BlackHoleAdapter.#{method_name} called"
-      end
-
-      def remove_column(table_name, *column_names)
-        puts "ActiveRecord::ConnectionAdapters::BlackHoleAdapter.#{method_name} called"
-      end
-      alias :remove_columns :remove_column
-
-      def change_column_default(table_name, column_name, default)
-        puts "ActiveRecord::ConnectionAdapters::BlackHoleAdapter.#{method_name} called"
-      end
-
-      def change_column_null(table_name, column_name, null, default=nil)
-        puts "ActiveRecord::ConnectionAdapters::BlackHoleAdapter.#{method_name} called"
-      end
-
-      def change_column(table_name, column_name, type, options={})
-        puts "ActiveRecord::ConnectionAdapters::BlackHoleAdapter.#{method_name} called"
-      end
-
-      def rename_column(table_name, column_name, new_column_name)
-        puts "ActiveRecord::ConnectionAdapters::BlackHoleAdapter.#{method_name} called"
-      end
-
-      def empty_insert_statement(table_name)
-        puts "ActiveRecord::ConnectionAdapters::BlackHoleAdapter.#{method_name} called"
       end
     end
   end
